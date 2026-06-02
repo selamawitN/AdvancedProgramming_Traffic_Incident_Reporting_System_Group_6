@@ -1,4 +1,4 @@
-# Traffic Incident Management System
+# Traffic Incident Reporting System
 
 
 
@@ -16,7 +16,7 @@
 
 ## Overview
 
-The **Traffic Incident Management System** addresses a critical gap between citizens who witness traffic incidents and administrators responsible for emergency response. In many situations, people are unsure where to report incidents, or the information fails to reach the right personnel in time.
+The **Traffic Incident Reporting System** addresses a critical gap between citizens who witness traffic incidents and administrators responsible for emergency response. In many situations, people are unsure where to report incidents, or the information fails to reach the right personnel in time.
 
 This system allows any citizen to submit an incident report in under 60 seconds through a browser-based map interface. When a critical incident is reported, all connected administrators receive an instant alert on their desktop applications — with no delay and no missed emergencies.
 
@@ -45,7 +45,7 @@ The system consists of two components:
 - **Secure Login** — Role-based access; only accounts with the `admin` role can log in
 - **Incident Table** — View all incidents with ID, type, location, severity, status, and reporter
 - **Status Management** — Update incident status to *In Progress* or *Resolved*
-- **Real-Time UDP Alerts** — Instant popup notification when a critical incident is submitted
+- **Real-Time UDP Alerts** — Instant pop-up notification when a critical incident is submitted
 - **Watchdog Thread** — Automatically re-alerts administrators every 60 seconds for unresolved critical incidents
 - **Analytics Dashboard** — Bar chart grouped by incident type; pie chart showing severity distribution
 - **Hotspot Detection** — Ranked list of the most incident-prone locations
@@ -64,10 +64,10 @@ The system consists of two components:
                        ▼
 ┌─────────────────────────────────────────────────────────┐
 │                    JAVA SERVER                          │
-│  ┌─────────────┐  ┌──────────────┐  ┌───────────────┐  │
-│  │  WebServer  │  │  TCPServer   │  │   UDPServer   │  │
-│  │ (Port 8081) │  │ (Port 5000)  │  │  (Port 6000)  │  │
-│  └──────┬──────┘  └──────┬───────┘  └───────┬───────┘  │
+│  ┌─────────────┐  ┌──────────────┐  ┌───────────────┐   │
+│  │  WebServer  │  │  TCPServer   │  │   UDPServer   │   │
+│  │ (Port 8081) │  │ (Port 5000)  │  │  (Port 6000)  │   │
+│  └──────┬──────┘  └──────┬───────┘  └───────┬───────┘   │
 │         │                │                  │           │
 │         └────────────────┼──────────────────┘           │
 │                          ▼                              │
@@ -199,10 +199,12 @@ TrafficSystem-main/
 │   │   ├── UDPListener.java
 │   │   ├── UDPServer.java
 │   │   └── WebServer.java
-│   │
+|   |
+│   │__ Main.java
+|   |
 │   └── utils/
 │       ├── Logger.java
-│       └── Main.java
+│       
 │
 └── README.md
 ```
