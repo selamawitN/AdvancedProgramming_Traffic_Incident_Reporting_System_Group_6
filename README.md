@@ -169,25 +169,40 @@ Submit another incident with **Severity: Low**. Confirm that no UDP popup appear
 ## Project Structure
 
 ```
-traffic-incident-system/
+TrafficSystem-main/
+│
+├── .vscode/
+├── bin/
+├── lib/
+├── logs/
 │
 ├── src/
-│   ├── Main.java                # Entry point — initializes and starts all servers
-│   ├── TCPServer.java           # Manages admin desktop client connections (Port 5000)
-│   ├── WebServer.java           # Serves the web dashboard and handles POST submissions (Port 8081)
-│   ├── UDPServer.java           # Broadcasts emergency alerts to all clients (Port 6000)
-│   ├── UDPListener.java         # Admin-side background thread for receiving UDP alerts
-│   ├── DatabaseManager.java     # Centralizes all MySQL database operations
-│   ├── WatchdogThread.java      # Periodically checks for unresolved critical incidents
-│   ├── Logger.java              # Thread-safe file logger with file locking
+│   ├── database/
+│   │   ├── DatabaseConn.java
+│   │   ├── IncidentDAO.java
+│   │   └── UserDAO.java
 │   │
-│   └── ui/
-│       ├── LoginFrame.java      # Administrator login screen
-│       ├── DashboardFrame.java  # Main incident management table
-│       └── AnalyticsFrame.java  # Charts and hotspot analysis window
-│
-├── logs/
-│   └── system.log               # Auto-generated at runtime
+│   ├── gui/
+│   │   ├── AdminDashboard.java
+│   │   ├── AnalyticsScreen.java
+│   │   ├── LoginScreen.java
+│   │   └── SplashScreen.java
+│   │
+│   ├── models/
+│   │   ├── Incident.java
+│   │   └── User.java
+│   │
+│   ├── network/
+│   │   ├── ClientHandler.java
+│   │   ├── TrafficClient.java
+│   │   ├── TrafficServer.java
+│   │   ├── UDPListener.java
+│   │   ├── UDPServer.java
+│   │   └── WebServer.java
+│   │
+│   └── utils/
+│       ├── Logger.java
+│       └── Main.java
 │
 └── README.md
 ```
