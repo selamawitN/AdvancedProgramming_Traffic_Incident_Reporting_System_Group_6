@@ -1,6 +1,6 @@
 # Traffic Incident Management System
 
----
+
 
 ## Table of Contents
 
