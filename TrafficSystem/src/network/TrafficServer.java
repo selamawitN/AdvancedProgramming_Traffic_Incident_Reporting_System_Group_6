@@ -23,7 +23,6 @@ public class TrafficServer {
 
         Logger.logServerStart(PORT);
 
-        // Start web dashboard
         WebServer.start();
 
         startWatchdogThread();
