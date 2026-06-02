@@ -4,10 +4,6 @@ import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
 
-// UDP Server — sends emergency broadcasts to ALL clients at once
-// Unlike TCP which is one-to-one, UDP is one-to-MANY
-// Perfect for emergency alerts
-
 public class UDPServer {
 
     private static final int UDP_PORT = 6000;
@@ -22,14 +18,10 @@ public class UDPServer {
         }
     }
 
-    // Broadcast a message to ALL clients listening on UDP port 6000
-    // This is called automatically when a critical incident is reported
     public void broadcast(String message) {
         try {
             byte[] data = message.getBytes();
 
-            // InetAddress.getByName("255.255.255.255") = broadcast address
-            // This means: send to EVERYONE on the network
             InetAddress broadcastAddress =
                 InetAddress.getByName("255.255.255.255");
 
@@ -47,7 +39,6 @@ public class UDPServer {
         }
     }
 
-    // Send to a specific IP address only (for targeted alerts)
     public void sendTo(String ipAddress, String message) {
         try {
             byte[] data = message.getBytes();
