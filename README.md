@@ -1,37 +1,282 @@
+# Traffic Incident Management System
 
-# TRAFFIC INCIDENT REPORTING SYSTEM
+<div align="center">
 
-## A summary of the Project Report
+![Java](https://img.shields.io/badge/Java-ED8B00?style=for-the-badge&logo=openjdk&logoColor=white)
+![MySQL](https://img.shields.io/badge/MySQL-005C84?style=for-the-badge&logo=mysql&logoColor=white)
+![XAMPP](https://img.shields.io/badge/XAMPP-FB7A24?style=for-the-badge&logo=xampp&logoColor=white)
+![Leaflet](https://img.shields.io/badge/Leaflet-199900?style=for-the-badge&logo=leaflet&logoColor=white)
 
- ### **INTRODUCTION**
+**A real-time traffic incident reporting and response platform — built entirely in Java.**
 
-This project is called Traffic Incident Reporting System. We developed this system to help citizens report traffic incidents easily and to help administrators respond to emergencies faster. The system has two main parts. The first part is a web dashboard where citizens can report incidents using an interactive map. The second part is a desktop application where administrators can manage all reported incidents and receive instant alerts for critical situations.
+</div>
 
-The main problem this project solves is the slow response time when traffic accidents happen. In many cases, people do not know where to report incidents or the information does not reach the right people quickly enough. Our system allows anyone with a browser to report an incident in less than one minute. When someone reports a critical incident, all administrators receive an instant popup alert on their computers.
-For this project, we used Java as the main programming language. We chose Java because it is platform - independent and has strong networking libraries. For the database, we used MySQL which runs on XAMPP. The desktop interface was built using Java Swing. For the web dashboard, we wrote Java code to create an HTTP server that serves HTML, CSS, and JavaScript with the Leaflet library for maps. The system uses three different types of communication. TCP sockets handle regular client server communication on port 5000. UDP broadcast sends emergency alerts on port 6000. There is also a built in HTTP server that serves the web dashboard on port 8081.
+---
 
-The system follows a client - server architecture. The server is the central component that handles all requests from clients. When a citizen submits an incident report through the web dashboard, the HTTP request goes to the web server which then communicates with the database. When an administrator logs into the desktop application, the TCP client connects to the TCP server. The server creates a new thread for each connected client so multiple administrators can work simultaneously.
+## Table of Contents
 
-The database stores two main tables. The users table contains administrator accounts with their email, password, and role. The incidents table stores every reported incident including the type, location, severity, description, status, reporter name, timestamp, and map coordinates. When a critical incident is reported, the system triggers a UDP broadcast. The UDPServer class sends a packet to the broadcast address on port 6000. Any administrator who is logged into the desktop application has a UDPListener thread running in the background. When this listener receives a broadcast, it immediately shows a pop-up window on the administrator screen.
+- [Overview](#overview)
+- [Features](#features)
+- [System Architecture](#system-architecture)
+- [Tech Stack](#tech-stack)
+- [Getting Started](#getting-started)
+- [Testing](#testing)
+- [Database Schema](#database-schema)
+- [Project Structure](#project-structure)
 
-The web dashboard is not a separate application. It is written entirely in Java inside the WebServer class. This class creates an HTTP server that listens on port 8081. When a browser requests the homepage, the WebServer class sends an HTML string that contains all the CSS, JavaScript, and map code. When the browser submits an incident form, the WebServer class receives the POST request, parses the JSON data, and saves the incident to the database. This means the entire web dashboard is served from the same Java application without needing Apache or Tomcat.
+---
 
-The web dashboard provides citizens with a map where they can click to select the exact location of an incident. There is also a search feature that allows users to type a place name and the map will zoom to that location. There is a button called Use My Location that gets the user current position using the browser geolocation API. The form asks for incident type, location name, severity level, the citizen name, and a description. After submitting the form, the incident appears on the admin dashboard instantly. The web dashboard also has a First Aid tab that shows instructions for CPR, bleeding control, and burns. It also displays emergency phone numbers for ambulance, fire brigade, and police.
+## Overview
 
-The desktop application requires login before access. Only users with the admin role can log in. Once logged in, the administrator sees a table showing all incidents with columns for ID, type, location, severity, status, and reported by. The administrator can change the status of an incident to In Progress or Resolved. There is also a delete button to remove incidents from the system. A statistics panel at the top shows total incidents, critical incidents, and resolved incidents.
+The **Traffic Incident Management System** addresses a critical gap between citizens who witness traffic incidents and administrators responsible for emergency response. In many situations, people are unsure where to report incidents, or the information fails to reach the right personnel in time.
 
-The analytics screen shows two charts. One bar chart displays incidents grouped by type. One pie chart shows the distribution of severity levels. There is also a list of the most dangerous locations based on how many incidents were reported at each place. These charts are drawn using Java2D without any external charting libraries.
+This system allows any citizen to submit an incident report in under 60 seconds through a browser-based map interface. When a critical incident is reported, all connected administrators receive an instant alert on their desktop applications — with no delay and no missed emergencies.
 
-The logging system writes every important action to a text file. This includes logins, incident reports, status changes, and UDP broadcasts. The logger uses file locking so that multiple threads do not corrupt the file at the same time.
+The system consists of two components:
 
-There is also a watchdog thread that runs every sixty seconds. This thread checks the database for any critical incidents that are still open. If it finds any, it sends another UDP alert to remind administrators that critical incidents remain unresolved.
+| Component | Users | Purpose |
+|---|---|---|
+| Web Dashboard | Citizens | Report incidents via an interactive map |
+| Desktop Application | Administrators | Manage incidents, receive alerts, view analytics |
 
- ### **HOW TO TEST THE SYSTEM**
+---
 
-To test the system completely, the user should follow these steps.
+## Features
 
-First, open the web dashboard ( http://localhost:8081 ) in a browser. Click anywhere on the map to select a location. Then fill in the incident form. Second, look at the admin desktop application. The new incident should appear in the table with status. Third, select the incident row in the admin table. then click any of the 3 buttons down.
-Fourth, click the Analytics button. A new window will open showing a bar chart and a pie chart. Fifth, click the View Logs button. A new window will open showing the last fifty log entries. Verify that the log shows the admin login, the incident report, the UDP broadcast, and the status change. Sixth, submit another incident through the web dashboard with severity Low. Verify that no UDP popup appears because only Critical incidents trigger the broadcast.
+### Web Dashboard (Citizens)
 
+- **Interactive Map** — Click anywhere on the map to pin the exact incident location
+- **Use My Location** — One-click geolocation using the browser GPS API
+- **Location Search** — Type a place name and the map zooms to that location automatically
+- **Incident Form** — Report incident type, severity level, description, and reporter name
+- **First Aid Guide** — Built-in instructions for CPR, bleeding control, and burns
+- **Emergency Contacts** — Direct display of ambulance, fire brigade, and police numbers
 
+### Desktop Application (Administrators)
 
+- **Secure Login** — Role-based access; only accounts with the `admin` role can log in
+- **Incident Table** — View all incidents with ID, type, location, severity, status, and reporter
+- **Status Management** — Update incident status to *In Progress* or *Resolved*
+- **Real-Time UDP Alerts** — Instant popup notification when a critical incident is submitted
+- **Watchdog Thread** — Automatically re-alerts administrators every 60 seconds for unresolved critical incidents
+- **Analytics Dashboard** — Bar chart grouped by incident type; pie chart showing severity distribution
+- **Hotspot Detection** — Ranked list of the most incident-prone locations
+- **Log Viewer** — View the last 50 system log entries without leaving the application
+
+---
+
+## System Architecture
+
+```
+┌─────────────────────────────────────────────────────────┐
+│                        CITIZENS                         │
+│              Browser → http://localhost:8081            │
+└──────────────────────┬──────────────────────────────────┘
+                       │ HTTP (Port 8081)
+                       ▼
+┌─────────────────────────────────────────────────────────┐
+│                    JAVA SERVER                          │
+│  ┌─────────────┐  ┌──────────────┐  ┌───────────────┐  │
+│  │  WebServer  │  │  TCPServer   │  │   UDPServer   │  │
+│  │ (Port 8081) │  │ (Port 5000)  │  │  (Port 6000)  │  │
+│  └──────┬──────┘  └──────┬───────┘  └───────┬───────┘  │
+│         │                │                  │           │
+│         └────────────────┼──────────────────┘           │
+│                          ▼                              │
+│                    ┌───────────┐                        │
+│                    │  MySQL DB │                        │
+│                    │  (XAMPP)  │                        │
+│                    └───────────┘                        │
+└─────────────────────────────────────────────────────────┘
+                       │ TCP (Port 5000)
+                       ▼ UDP Broadcast (Port 6000)
+┌─────────────────────────────────────────────────────────┐
+│               ADMIN DESKTOP APPLICATION                 │
+│         Java Swing + TCPClient + UDPListener            │
+└─────────────────────────────────────────────────────────┘
+```
+
+### Communication Protocols
+
+| Protocol | Port | Purpose |
+|---|---|---|
+| HTTP | `8081` | Serves the web dashboard and handles incident form submissions |
+| TCP | `5000` | Persistent connection between the admin desktop client and the server |
+| UDP Broadcast | `6000` | Real-time emergency alerts pushed to all connected administrators |
+
+> The web dashboard is served entirely from within the Java application via the `WebServer` class. No Apache, Tomcat, or external web server is required.
+
+---
+
+## Tech Stack
+
+| Layer | Technology |
+|---|---|
+| Language | Java (JDK 8+) |
+| Desktop UI | Java Swing |
+| Web Server | Built-in Java HTTP Server |
+| Web Frontend | HTML, CSS, JavaScript |
+| Maps | [Leaflet.js](https://leafletjs.com/) |
+| Database | MySQL via XAMPP |
+| Charts | Java2D (no external charting libraries) |
+| Networking | Java TCP Sockets + UDP Broadcast |
+
+---
+
+## Getting Started
+
+### Prerequisites
+
+- Java JDK 8 or higher
+- [XAMPP](https://www.apachefriends.org/) with MySQL running
+- Any modern web browser
+
+### 1. Set Up the Database
+
+1. Start XAMPP and ensure the MySQL service is running.
+2. Open **phpMyAdmin** at `http://localhost/phpmyadmin`.
+3. Create a new database (e.g., `traffic_db`).
+4. Run the following SQL to create the required tables:
+
+```sql
+CREATE TABLE users (
+    id       INT AUTO_INCREMENT PRIMARY KEY,
+    email    VARCHAR(100) NOT NULL,
+    password VARCHAR(100) NOT NULL,
+    role     VARCHAR(20)  NOT NULL
+);
+
+CREATE TABLE incidents (
+    id          INT AUTO_INCREMENT PRIMARY KEY,
+    type        VARCHAR(50),
+    location    VARCHAR(100),
+    severity    VARCHAR(20),
+    description TEXT,
+    status      VARCHAR(30),
+    reported_by VARCHAR(100),
+    timestamp   DATETIME,
+    latitude    DOUBLE,
+    longitude   DOUBLE
+);
+```
+
+5. Insert a default administrator account:
+
+```sql
+INSERT INTO users (email, password, role)
+VALUES ('admin@traffic.com', 'admin123', 'admin');
+```
+
+### 2. Compile and Run the Server
+
+```bash
+javac *.java
+java Main
+```
+
+The application will start all three services simultaneously:
+
+- Web Dashboard — `http://localhost:8081`
+- TCP Server — port `5000`
+- UDP Broadcast — port `6000`
+
+### 3. Launch the Admin Desktop Application
+
+Run the desktop JAR or main class. Log in using the admin credentials created in step 1.
+
+### 4. Access the Web Dashboard
+
+Open a browser and navigate to:
+
+```
+http://localhost:8081
+```
+
+---
+
+## Testing
+
+The following steps verify that all system components are functioning correctly.
+
+**Step 1 — Submit a Critical Incident**
+Open `http://localhost:8081`, click the map to select a location, complete the form with **Severity: Critical**, and submit.
+
+**Step 2 — Verify the UDP Alert**
+The admin desktop application should display an immediate popup alert for the critical incident.
+
+**Step 3 — Check the Incident Table**
+The new incident should appear in the admin table with a status of `Open`.
+
+**Step 4 — Update Incident Status**
+Select the incident row and click one of the three action buttons: *In Progress*, *Resolved*, or *Delete*.
+
+**Step 5 — View Analytics**
+Click the **Analytics** button. A window should open displaying a bar chart by incident type and a pie chart by severity level.
+
+**Step 6 — Review the System Log**
+Click **View Logs** and verify the log contains entries for: admin login, incident submission, UDP broadcast, and the status change.
+
+**Step 7 — Confirm Low-Severity Behavior**
+Submit another incident with **Severity: Low**. Confirm that no UDP popup appears — broadcast alerts are triggered exclusively for Critical incidents.
+
+---
+
+## Database Schema
+
+### `users`
+
+| Column | Type | Description |
+|---|---|---|
+| `id` | INT | Primary key |
+| `email` | VARCHAR | Administrator email address |
+| `password` | VARCHAR | Administrator password |
+| `role` | VARCHAR | Must be `admin` to access the desktop application |
+
+### `incidents`
+
+| Column | Type | Description |
+|---|---|---|
+| `id` | INT | Primary key |
+| `type` | VARCHAR | Incident type (e.g., Accident, Flood) |
+| `location` | VARCHAR | Human-readable location name |
+| `severity` | VARCHAR | `Low`, `Medium`, `High`, or `Critical` |
+| `description` | TEXT | Full incident description provided by the citizen |
+| `status` | VARCHAR | `Open`, `In Progress`, or `Resolved` |
+| `reported_by` | VARCHAR | Name of the reporting citizen |
+| `timestamp` | DATETIME | Date and time the incident was submitted |
+| `latitude` | DOUBLE | Map latitude coordinate |
+| `longitude` | DOUBLE | Map longitude coordinate |
+
+---
+
+## Project Structure
+
+```
+traffic-incident-system/
+│
+├── src/
+│   ├── Main.java                # Entry point — initializes and starts all servers
+│   ├── TCPServer.java           # Manages admin desktop client connections (Port 5000)
+│   ├── WebServer.java           # Serves the web dashboard and handles POST submissions (Port 8081)
+│   ├── UDPServer.java           # Broadcasts emergency alerts to all clients (Port 6000)
+│   ├── UDPListener.java         # Admin-side background thread for receiving UDP alerts
+│   ├── DatabaseManager.java     # Centralizes all MySQL database operations
+│   ├── WatchdogThread.java      # Periodically checks for unresolved critical incidents
+│   ├── Logger.java              # Thread-safe file logger with file locking
+│   │
+│   └── ui/
+│       ├── LoginFrame.java      # Administrator login screen
+│       ├── DashboardFrame.java  # Main incident management table
+│       └── AnalyticsFrame.java  # Charts and hotspot analysis window
+│
+├── logs/
+│   └── system.log               # Auto-generated at runtime
+│
+└── README.md
+```
+
+---
+
+## Authors
+
+Developed as a university project to address the real-world problem of slow emergency response times in traffic incident management.
