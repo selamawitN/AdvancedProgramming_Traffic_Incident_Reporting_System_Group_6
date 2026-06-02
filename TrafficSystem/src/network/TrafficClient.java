@@ -16,8 +16,6 @@ public class TrafficClient {
     private BufferedReader reportIn;
     private PrintWriter reportOut;
 
-    // REMOVED: rmiClient variable
-
     public boolean connect() {
         try {
             mainSocket = new Socket(HOST, PORT);
@@ -34,7 +32,6 @@ public class TrafficClient {
                 reportSocket.getOutputStream(), true);
             reportIn.readLine(); // welcome message
 
-            // REMOVED: rmiClient code block
 
             System.out.println("Connected to server successfully");
             return true;
@@ -44,7 +41,7 @@ public class TrafficClient {
         }
     }
 
-    // Main socket — for login, get incidents, update status
+    
     public synchronized String sendAndReceive(String message) {
         try {
             if (message != null && !message.isEmpty())
@@ -56,7 +53,7 @@ public class TrafficClient {
         }
     }
 
-    // Dedicated report socket — ONLY for submitting incidents
+   
     public String sendReport(String message) {
         try {
             synchronized (reportOut) {
@@ -69,7 +66,7 @@ public class TrafficClient {
         }
     }
 
-    // REMOVED: getRMI() method
+   
 
     public void disconnect() {
         try {
