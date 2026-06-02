@@ -23,14 +23,14 @@ public class TrafficClient {
                 mainSocket.getInputStream()));
             mainOut = new PrintWriter(
                 mainSocket.getOutputStream(), true);
-            mainIn.readLine(); // welcome message
+            mainIn.readLine(); 
 
             reportSocket = new Socket(HOST, PORT);
             reportIn = new BufferedReader(new InputStreamReader(
                 reportSocket.getInputStream()));
             reportOut = new PrintWriter(
                 reportSocket.getOutputStream(), true);
-            reportIn.readLine(); // welcome message
+            reportIn.readLine();
 
 
             System.out.println("Connected to server successfully");
